@@ -1,0 +1,16 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@types/node": "^13.7.7",
+    "@types/socket.io": "^2.1.4",
+    "socket.io": "^2.3.0",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3"
+  }
+}
