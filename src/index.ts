@@ -11,7 +11,7 @@ const costs = {
     [NodeType.Artillery]: 2000
 };
 
-const io = socketio(3001);
+const io = socketio(process.env.PORT || 3001);
 const net = new Network();
 
 let players: (socketio.Socket | undefined)[] = [undefined, undefined, undefined, undefined];
