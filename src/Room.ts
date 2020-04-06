@@ -50,6 +50,8 @@ class Room {
                 this.key += ('QWERTYUIOPASDFGHJKLZXCVBNM')[Math.floor(Math.random() * 26)];
             }
         }
+
+        console.log(`New room ${this.id} has been created!`);
     }
 
     /*
@@ -62,6 +64,8 @@ class Room {
         if (this.isLaunched || this.isRunning || this.game !== undefined || this.players.length >= this.maxPlayers) {
             this.spectators.push(player);
             player.team = Player.Team.Neutral;
+
+            console.log(`Player ${player.id} has joined room ${this.id} as a player!`);
         } else {
             this.players.push(player);
             player.team = this.players.length;
@@ -82,6 +86,8 @@ class Room {
                 if (this.players.length > 0 && player === this.players[0])
                     this.pauseGame();
             })
+
+            console.log(`Player ${player.id} has joined room ${this.id} as a spectator!`);
         }
 
         this.emitRoomData();
@@ -113,6 +119,8 @@ class Room {
             }
 
             this.emitRoomData();
+
+            console.log(`Player ${player.id} has stopped playing in room ${this.id}!`);
         } else if (this.spectators.includes(player)) {
             // Remove from spectator list and room
             this.spectators = this.spectators.splice(this.spectators.indexOf(player), 1);
@@ -120,6 +128,8 @@ class Room {
             player.socket.emit('roomData', JSON.stringify(undefined));
 
             this.emitRoomData();
+
+            console.log(`Player ${player.id} has stopped spectating in room ${this.id}!`);
         }
     }
 
@@ -130,12 +140,21 @@ class Room {
 
         this.game = new Game(this.players.length);
         this.isLaunched = true;
+
+        console.log(`Room ${this.id} has started!`);
     }
 
     // Stop the game, resetting all players and removing assets of the game
     public stopRoom() {
+        if (!this.isLaunched)
+            return;
+
         if (this.isRunning)
             this.pauseGame();
+
+        delete this.game;
+        this.game = undefined;
+        this.isLaunched = false;
 
         for (let player of this.players) {
             this.removePlayer(player);
@@ -144,13 +163,9 @@ class Room {
             this.removePlayer(spectator);
         }
 
-        if (this.isLaunched || this.game !== undefined) {
-            delete this.game;
-            this.game = undefined;
-            this.isLaunched = false;
-        }
-
         this.stopHandler();
+
+        console.log(`Room ${this.id} has stopped!`);
     }
 
     // Start simulating ticks of the Game
@@ -203,6 +218,8 @@ class Room {
         }, Room.tickDuration);
 
         this.isRunning = true;
+        
+        console.log(`Room ${this.id} has started running!`);
     }
 
     // Stop simulating ticks of the Game
@@ -222,6 +239,8 @@ class Room {
         this.tickInterval = undefined;
 
         this.isRunning = false;
+
+        console.log(`Room ${this.id} has been paused!`);
     }
 
     // Send the JSON string of all room data to client sockets

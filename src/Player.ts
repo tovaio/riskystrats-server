@@ -68,6 +68,8 @@ class Player {
             for (let key in this.handlers['disconnect']) {
                 this.handlers['disconnect'][key]();
             }
+
+            console.log(`Player ${this.id} has disconnected!`);
         });
 
         // Run appropriate handlers when client event fires
@@ -82,7 +84,7 @@ class Player {
         // Send player data to client
         this.emitPlayerData();
         
-        console.log(`New player ${this.name} has connected!`)!
+        console.log(`Player ${this.id} has connected!`)!
     }
 
     /*

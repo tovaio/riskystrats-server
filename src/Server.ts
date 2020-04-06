@@ -21,6 +21,8 @@ class Server {
     public constructor(
         private readonly port = process.env.PORT || 3001
     ) {
+        console.log('Starting server...');
+
         this.io = socketio(this.port);
         this.roomManager = new RoomManager(this.io);
 
